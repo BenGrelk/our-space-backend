@@ -1,0 +1,6 @@
+﻿services:
+  our-place-backend:
+    image: our-place-backend
+    build:
+      context: .
+      dockerfile: our-place-backend/Dockerfile
