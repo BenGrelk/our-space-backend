@@ -1,18 +1,28 @@
 using Microsoft.AspNetCore.Mvc;
+using our_place_backend.Services;
 
-namespace our_place_backend.Controllers;
-
-public class UserController : Controller
+namespace our_place_backend.Controllers
 {
-    [HttpGet("/user")]
-    public IActionResult Get()
+    public class UserController : Controller
     {
-        return Ok("Hello from UserController");
-    }
-    
-    [HttpGet("/user/{id}")]
-    public IActionResult Get(int id)
-    {
-        return Ok($"Hello from UserController with id {id}");
+        private readonly UserServices _userServices;
+
+        public UserController(UserServices userServices)
+        {
+            _userServices = userServices;
+        }
+
+        [HttpGet("/user")]
+        public IActionResult Get()
+        {
+            return Ok("Hello from UserController");
+        }
+
+        [HttpGet("/user/all")]
+        public IActionResult GetAll()
+        {
+            var users = _userServices.GetUsers();
+            return Ok(users);
+        }
     }
 }
