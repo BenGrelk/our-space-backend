@@ -12,7 +12,7 @@ namespace our_place_backend
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.using Microsoft.EntityFrameworkCore;
         public void ConfigureServices(IServiceCollection services)
@@ -23,8 +23,9 @@ namespace our_place_backend
             services.AddDbContext<MyDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
-            // Register UserServices with the dependency injection container
             services.AddScoped<UserServices>();
+            services.AddScoped<PostServices>();
+            services.AddScoped<ChannelServices>();
 
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" }); });
         }
