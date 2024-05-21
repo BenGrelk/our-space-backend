@@ -38,34 +38,34 @@ public class PostController(PostServices postServices) : Controller
         postServices.CreatePost(channelId, post);
         return Ok();
     }
-    
+
     [HttpDelete("/api/channels/{channelId}/posts/{postId}")]
     public IActionResult DeletePost(int channelId, int postId)
     {
         var success = postServices.DeletePost(postId);
-        
+
         if (!success) return NotFound();
-        
+
         return Ok();
     }
-    
+
     [HttpPut("/api/channels/{channelId}/posts/{postId}")]
     public IActionResult UpdatePost(int channelId, int postId, [FromBody] CreatePostModel post)
     {
         var success = postServices.UpdatePost(postId, post);
-        
+
         if (!success) return NotFound();
-        
+
         return Ok();
     }
-    
+
     [HttpGet("/api/channels/{channelId}/posts/{postId}")]
     public IActionResult GetPost(int channelId, int postId)
     {
         var post = postServices.GetPost(postId);
-        
+
         if (post == null) return NotFound();
-        
+
         return Ok(post);
     }
 }

@@ -23,5 +23,5 @@ public class User
 
     [Column("settings")] public string? Settings { get; set; }
 
-    [Column("banner")] public int? Banner { get; set; }
+    [Column("banner")] public byte[]? Banner { get; set; }
 }
