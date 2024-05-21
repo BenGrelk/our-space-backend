@@ -6,7 +6,7 @@ namespace our_place_backend.Controllers
     public class UserController(UserServices userServices) : Controller
     {
         private const string BaseRoute = "/api/users";
-        
+
         [HttpGet(BaseRoute)]
         public IActionResult Get()
         {

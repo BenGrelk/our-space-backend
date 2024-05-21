@@ -9,9 +9,9 @@ public class Post
 
     [Column("creator_user_id")] public int CreatorUserId { get; set; }
 
-    [Column("channel_id")] public int? ChannelId { get; set; }
+    [Column("channel_id")] public int ChannelId { get; set; }
 
-    [Column("attachment")] public byte[] Attachment { get; set; }
+    [Column("attachment")] public byte[]? Attachment { get; set; }
 
     [Column("message")] public string Message { get; set; }
 
