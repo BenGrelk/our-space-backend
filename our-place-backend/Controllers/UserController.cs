@@ -17,8 +17,8 @@ public class UserController(UserServices userServices) : Controller
     [HttpPost($"{BaseRoute}/create")]
     public IActionResult Create([FromBody] CreateUserModel model)
     {
-        var success = userServices.CreateUser(model);
-        return success ? Ok("User created") : BadRequest("Failed to create user");
+        var user = userServices.CreateUser(model);
+        return user != null ? Ok(user) : BadRequest("Failed to create user");
     }
 
     [HttpPut($"{BaseRoute}/update/{{userId}}")]
@@ -40,5 +40,12 @@ public class UserController(UserServices userServices) : Controller
     {
         var user = userServices.GetUser(userId);
         return user != null ? Ok(user) : NotFound("User not found");
+    }
+    
+    [HttpPost($"{BaseRoute}/signin")]
+    public IActionResult SignIn([FromBody] SignInModel model)
+    {
+        var user = userServices.AuthenticateUser(model);
+        return user != null ? Ok(user) : Unauthorized("Invalid credentials");
     }
 }

@@ -5,7 +5,7 @@ namespace our_place_backend.Services;
 
 public class UserServices(MyDbContext context)
 {
-    public bool CreateUser(CreateUserModel model)
+    public UserResponseModel? CreateUser(CreateUserModel model)
     {
         int id;
         try
@@ -39,13 +39,24 @@ public class UserServices(MyDbContext context)
         catch (Exception e)
         {
             Console.WriteLine(e);
-            return false;
+            return null;
         }
 
         context.Users.Add(user);
         context.SaveChanges();
 
-        return true;
+        return new UserResponseModel
+        {
+            UserId = user.UserId,
+            CreatedAt = user.CreatedAt,
+            Username = user.Username,
+            ProfilePicture = user.ProfilePicture,
+            DisplayName = user.DisplayName,
+            Status = user.Status,
+            Description = user.Description,
+            Settings = user.Settings,
+            Banner = user.Banner
+        };
     }
 
     public bool UpdateUser(int userId, CreateUserModel model)
@@ -79,14 +90,6 @@ public class UserServices(MyDbContext context)
 
         return true;
     }
-
-    public bool AuthenticateUser(string username, string password)
-    {
-        var user = context.Users.FirstOrDefault(user => user.Username == username);
-        if (user == null) return false;
-
-        return BCrypt.Net.BCrypt.Verify(password, user.Password);
-    }
     
     public UserResponseModel? GetUser(int userId)
     {
@@ -105,5 +108,32 @@ public class UserServices(MyDbContext context)
             Settings = user.Settings,
             Banner = user.Banner
         };
+    }
+    
+    public UserResponseModel? AuthenticateUser(SignInModel model) 
+    {
+        var username = model.Username;
+        var password = model.Password;
+        
+        var user = context.Users.FirstOrDefault(user => user.Username == username);
+        if (user == null) return null;
+
+        if (BCrypt.Net.BCrypt.Verify(password, user.Password))
+        {
+            return new UserResponseModel
+            {
+                UserId = user.UserId,
+                CreatedAt = user.CreatedAt,
+                Username = user.Username,
+                ProfilePicture = user.ProfilePicture,
+                DisplayName = user.DisplayName,
+                Status = user.Status,
+                Description = user.Description,
+                Settings = user.Settings,
+                Banner = user.Banner
+            };
+        }
+
+        return null;
     }
 }

@@ -7,7 +7,7 @@ public class PostServices(MyDbContext context)
 {
     public List<Post> GetChannels()
     {
-        return context.Posts.ToList();
+        return context.Posts.ToList().OrderByDescending(post => post.CreatedAt).Reverse().ToList();
     }
 
     public List<Post> GetPostsByChannel(int channelId)
