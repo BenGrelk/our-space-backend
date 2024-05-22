@@ -87,4 +87,23 @@ public class UserServices(MyDbContext context)
 
         return BCrypt.Net.BCrypt.Verify(password, user.Password);
     }
+    
+    public UserResponseModel? GetUser(int userId)
+    {
+        var user = context.Users.FirstOrDefault(user => user.UserId == userId);
+        if (user == null) return null;
+
+        return new UserResponseModel
+        {
+            UserId = user.UserId,
+            CreatedAt = user.CreatedAt,
+            Username = user.Username,
+            ProfilePicture = user.ProfilePicture,
+            DisplayName = user.DisplayName,
+            Status = user.Status,
+            Description = user.Description,
+            Settings = user.Settings,
+            Banner = user.Banner
+        };
+    }
 }

@@ -14,12 +14,21 @@ namespace our_place_backend
 
         private IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.using Microsoft.EntityFrameworkCore;
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
 
-            // Register the PostgreSQL context with the dependency injection container
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin",
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:5173")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+            });
+
             services.AddDbContext<MyDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -37,6 +46,8 @@ namespace our_place_backend
             {
                 app.UseDeveloperExceptionPage();
             }
+            
+            app.UseCors("AllowSpecificOrigin");
 
             app.UseSwagger();
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"); });
